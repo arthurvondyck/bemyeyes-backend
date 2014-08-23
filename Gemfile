@@ -12,7 +12,7 @@ source 'https://rubygems.org'
 
 # Project requirements
 gem 'rake'
-
+gem "activesupport"
 # Component requirements
 gem 'slim'
 gem 'bson_ext', :require => 'mongo'
