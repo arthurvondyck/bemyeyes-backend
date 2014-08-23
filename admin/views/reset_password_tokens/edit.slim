@@ -1,0 +1,8 @@
+ul class="nav nav-tabs"
+  li = link_to tag_icon(:list, pat(:list)), url(:reset_password_tokens, :index)
+  li = link_to tag_icon(:plus, pat(:new)), url(:reset_password_tokens, :new)
+  li class="active" = link_to tag_icon(:edit, pat(:edit)), url(:reset_password_tokens, :edit, :id => @reset_password_token.id)
+
+div class="tabs-content"
+  = form_for :reset_password_token, url(:reset_password_tokens, :update, :id => @reset_password_token.id), :method => :put, :class => 'form-horizontal' do |f|
+    = partial 'reset_password_tokens/form', :locals => { :f => f }

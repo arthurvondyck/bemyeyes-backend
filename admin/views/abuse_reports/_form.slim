@@ -1,0 +1,37 @@
+- error = @abuse_report.errors.include?(:request_id)
+fieldset class='control-group#{error ? ' has-error' : ''}'
+  = f.label :request_id, :class => 'control-label'
+  div class='controls'
+    = f.text_field :request_id, :class => 'form-control input-large input-with-feedback', :autofocus => true
+    span class='help-inline' = error ? f.error_message_on(:request_id, :class => 'text-error') : pat(:example)
+- error = @abuse_report.errors.include?(:blind_id)
+fieldset class='control-group#{error ? ' has-error' : ''}'
+  = f.label :blind_id, :class => 'control-label'
+  div class='controls'
+    = f.text_field :blind_id, :class => 'form-control input-large input-with-feedback'
+    span class='help-inline' = error ? f.error_message_on(:blind_id, :class => 'text-error') : pat(:example)
+- error = @abuse_report.errors.include?(:helper_id)
+fieldset class='control-group#{error ? ' has-error' : ''}'
+  = f.label :helper_id, :class => 'control-label'
+  div class='controls'
+    = f.text_field :helper_id, :class => 'form-control input-large input-with-feedback'
+    span class='help-inline' = error ? f.error_message_on(:helper_id, :class => 'text-error') : pat(:example)
+- error = @abuse_report.errors.include?(:reason)
+fieldset class='control-group#{error ? ' has-error' : ''}'
+  = f.label :reason, :class => 'control-label'
+  div class='controls'
+    = f.text_field :reason, :class => 'form-control input-large input-with-feedback'
+    span class='help-inline' = error ? f.error_message_on(:reason, :class => 'text-error') : pat(:example)
+- error = @abuse_report.errors.include?(:reporter)
+fieldset class='control-group#{error ? ' has-error' : ''}'
+  = f.label :reporter, :class => 'control-label'
+  div class='controls'
+    = f.text_field :reporter, :class => 'form-control input-large input-with-feedback'
+    span class='help-inline' = error ? f.error_message_on(:reporter, :class => 'text-error') : pat(:example)
+
+div class="form-actions"
+  = f.submit pat(:save), :class => 'btn btn-primary'
+  |&nbsp;
+  = f.submit pat(:save_and_continue), :class => 'btn btn-info', :name => 'save_and_continue'
+  |&nbsp;
+  = link_to pat(:cancel), url(:abuse_reports, :index), :class => 'btn btn-default'

@@ -1,0 +1,8 @@
+ul class="nav nav-tabs"
+  li = link_to tag_icon(:list, pat(:list)), url(:helper_points, :index)
+  li = link_to tag_icon(:plus, pat(:new)), url(:helper_points, :new)
+  li class="active" = link_to tag_icon(:edit, pat(:edit)), url(:helper_points, :edit, :id => @helper_point.id)
+
+div class="tabs-content"
+  = form_for :helper_point, url(:helper_points, :update, :id => @helper_point.id), :method => :put, :class => 'form-horizontal' do |f|
+    = partial 'helper_points/form', :locals => { :f => f }

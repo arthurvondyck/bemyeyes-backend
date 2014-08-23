@@ -1,0 +1,52 @@
+ul class="nav nav-tabs"
+  li class="active" = link_to tag_icon(:list, pat(:list)), url(:helper_points, :index)
+  li = link_to tag_icon(:plus, pat(:new)), url(:helper_points, :new)
+
+div class="tabs-content"
+  table class="table table-striped table-hover table-condensed" id="list"
+    thead
+      tr
+        th class='header list-menu'
+          div class='dropdown'
+            a href='#' class='list-menu-toggle.dropdown-toggle dropdown-toggle' data-toggle='dropdown'
+              = tag_icon :magic
+              span class='caret'
+            ul class='list-menu dropdown-menu' role='dropdown'
+              li class='list-menu-wrapper' = link_to tag_icon('check-square-o', pat(:select_all)), '#', :id => 'select-all', :class => 'list-menu-link'
+              li class='list-menu-wrapper list-menu-wrapper-disabled' = link_to tag_icon('square-o', pat(:deselect_all)), '#', :id => 'deselect-all', :class => 'list-menu-link list-menu-link-disabled'
+              li class='list-menu-divider divider'
+              li class='list-menu-wrapper list-menu-wrapper-disabled'
+                = link_to tag_icon('trash-o', pat(:delete_selected)), '#', :id => 'delete-selected', :class => 'list-menu-link list-menu-link-disabled'
+                div class='list-menu-popover-delete-selected popover right'
+                  div class='arrow'
+                  h3 class='popover-title' = pat(:delete_selected_title)
+                  div class='popover-content'
+                    = form_tag url(:helper_points, :destroy_many), :method => :delete do
+                      = hidden_field_tag :helper_point_ids, :'data-delete-many-ids' => true
+                      = submit_tag  pat(:delete), :class =>'list-menu-popover-delete-selected-btn btn btn-danger btn-small'
+                      div class='btn btn-default btn-small cancel' = pat(:cancel)
+        th class='header' = mat(:helper_point, :user_id)
+        th class='header' = mat(:helper_point, :log_time)
+        th class='header' = mat(:helper_point, :point)
+        th class='header' = mat(:helper_point, :message)
+        th class='header list-row-action-header'
+
+    tbody
+      -@helper_points.each do |helper_point|
+        tr class='list-row'
+          td class='list-column list-selectable' = check_box_tag 'helper_point_ids[]', :value => helper_point.id, :class => 'list-selectable-checkbox'
+          td class='list-column' = helper_point.user_id
+          td class='list-column' = helper_point.log_time
+          td class='list-column' = helper_point.point
+          td class='list-column' = helper_point.message
+          td class='list-column list-row-action'
+            div class='list-row-action-wrapper'
+              = link_to tag_icon(:edit), :href => url(:helper_points, :edit, :id => helper_point.id), :rel => :tooltip, :title => "#{pat(:edit)} helper_point", :class => 'list-row-action-wrapper-link'
+              = link_to tag_icon('trash-o'), :rel => :tooltip, :title => "#{pat(:delete)} helper_point", :class => 'list-row-action-delete-one list-row-action-wrapper-link'
+              div class='popover list-row-action-popover-delete-one left'
+                div class='arrow'
+                h3 class='popover-title' = pat(:delete, :model => "helper_point")
+                div class='popover-content'
+                  = form_tag url(:helper_points, :destroy, :id => helper_point.id), :method => :delete do
+                    = submit_tag pat(:delete), :class =>'list-row-action-popover-delete-one-btn btn btn-danger btn-small'
+                    div class='btn btn-default btn-small cancel' = pat(:cancel)

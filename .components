@@ -1,0 +1,10 @@
+---
+:orm: mongomapper
+:test: none
+:mock: none
+:script: none
+:renderer: slim
+:stylesheet: none
+:namespace: BemyeyesBackend
+:migration_format: number
+:admin_renderer: slim
