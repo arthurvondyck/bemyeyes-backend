@@ -1,4 +1,5 @@
 require 'active_support'
+require 'active_support/core_ext'
 
 module BemyeyesBackend
   class Admin < Padrino::Application
