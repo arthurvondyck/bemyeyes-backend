@@ -43,7 +43,7 @@ div class="tabs-content"
       -@devices.each do |device|
         tr class='list-row'
           td class='list-column list-selectable' = check_box_tag 'device_ids[]', :value => device.id, :class => 'list-selectable-checkbox'
-          td class='list-column' = link_to device.user_id, :href => url(:users, :edit, :id => device.user_id)
+          td class='list-column' = device.user_id
           td class='list-column' = device.device_token
           td class='list-column' = device.device_name
           td class='list-column' = device.model
