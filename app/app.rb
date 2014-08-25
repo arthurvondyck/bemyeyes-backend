@@ -1,3 +1,6 @@
+require 'active_support'
+require 'active_support/core_ext'
+
 module BemyeyesBackend
   class App < Padrino::Application
     register Padrino::Mailer
