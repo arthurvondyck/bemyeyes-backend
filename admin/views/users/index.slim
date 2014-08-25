@@ -68,9 +68,9 @@ div class="tabs-content"
           td class='list-column' = user.go_to_sleep_in_seconds_since_midnight
           td class='list-column' = time_ago_in_words user.created_at
           td class='list-column' = time_ago_in_words user.updated_at
+          td class='list-column' = user._type
           td class='list-column' = user.password_hash
           td class='list-column' = user.password_salt
-          td class='list-column' = user._type
           td class='list-column list-row-action'
             div class='list-row-action-wrapper'
               = link_to tag_icon(:edit), :href => url(:users, :edit, :id => user.id), :rel => :tooltip, :title => "#{pat(:edit)} user", :class => 'list-row-action-wrapper-link'
