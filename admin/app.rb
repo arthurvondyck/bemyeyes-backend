@@ -1,3 +1,5 @@
+require 'active_support'
+
 module BemyeyesBackend
   class Admin < Padrino::Application
     register Padrino::Mailer
