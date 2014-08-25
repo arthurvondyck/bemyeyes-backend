@@ -25,8 +25,6 @@ div class="tabs-content"
                       = hidden_field_tag :user_ids, :'data-delete-many-ids' => true
                       = submit_tag  pat(:delete), :class =>'list-menu-popover-delete-selected-btn btn btn-danger btn-small'
                       div class='btn btn-default btn-small cancel' = pat(:cancel)
-        th class='header' = mat(:user, :password_hash)
-        th class='header' = mat(:user, :password_salt)
         th class='header' = mat(:user, :email)
         th class='header' = mat(:user, :first_name)
         th class='header' = mat(:user, :last_name)
@@ -45,14 +43,14 @@ div class="tabs-content"
         th class='header' = mat(:user, :created_at)
         th class='header' = mat(:user, :updated_at)
         th class='header' = mat(:user, :_type)
+        th class='header' = mat(:user, :password_hash)
+        th class='header' = mat(:user, :password_salt)
         th class='header list-row-action-header'
 
     tbody
       -@users.each do |user|
         tr class='list-row'
           td class='list-column list-selectable' = check_box_tag 'user_ids[]', :value => user.id, :class => 'list-selectable-checkbox'
-          td class='list-column' = user.password_hash
-          td class='list-column' = user.password_salt
           td class='list-column' = user.email
           td class='list-column' = user.first_name
           td class='list-column' = user.last_name
@@ -70,6 +68,8 @@ div class="tabs-content"
           td class='list-column' = user.go_to_sleep_in_seconds_since_midnight
           td class='list-column' = time_ago_in_words user.created_at
           td class='list-column' = time_ago_in_words user.updated_at
+          td class='list-column' = user.password_hash
+          td class='list-column' = user.password_salt
           td class='list-column' = user._type
           td class='list-column list-row-action'
             div class='list-row-action-wrapper'
