@@ -39,7 +39,7 @@ div class="tabs-content"
         tr class='list-row'
           td class='list-column list-selectable' = check_box_tag 'abuse_report_ids[]', :value => abuse_report.id, :class => 'list-selectable-checkbox'
           td class='list-column' = abuse_report.request_id
-          td class='list-column' = link_to(abuse_report.blind_id) :href => url(:users, :edit, :id => abuse_report.blind_id)
+          td class='list-column' = link_to abuse_report.blind_id, :href => url(:users, :edit, :id => abuse_report.blind_id)
           td class='list-column' = abuse_report.helper_id
           td class='list-column' = abuse_report.reason
           td class='list-column' = abuse_report.reporter
