@@ -32,6 +32,7 @@ module BemyeyesBackend
     end
 
     access_control.roles_for :admin do |role|
+      role.project_module :event_logs, '/event_logs'
       role.project_module :tokens, '/tokens'
       role.project_module :reset_password_tokens, '/reset_password_tokens'
       role.project_module :helper_requests, '/helper_requests'

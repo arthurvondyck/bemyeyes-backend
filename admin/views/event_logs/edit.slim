@@ -1,0 +1,8 @@
+ul class="nav nav-tabs"
+  li = link_to tag_icon(:list, pat(:list)), url(:event_logs, :index)
+  li = link_to tag_icon(:plus, pat(:new)), url(:event_logs, :new)
+  li class="active" = link_to tag_icon(:edit, pat(:edit)), url(:event_logs, :edit, :id => @event_log.id)
+
+div class="tabs-content"
+  = form_for :event_log, url(:event_logs, :update, :id => @event_log.id), :method => :put, :class => 'form-horizontal' do |f|
+    = partial 'event_logs/form', :locals => { :f => f }
