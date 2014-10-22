@@ -3,7 +3,7 @@ class Device
 
   belongs_to :user, :class_name => "User"
 
-  key :device_token, String, :required => true
+  key :device_token, String, :required => true, :unique => true
   one :token, :foreign_key => :token_id, :class_name => "Token"
   key :device_name, String
   key :model, String
@@ -13,7 +13,7 @@ class Device
   key :locale, String
   key :development, Boolean, :default => false
   key :inactive, Boolean, :default => false
-  
+
   timestamps!
   def is_logged_in
     !token.nil?

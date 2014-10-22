@@ -1,6 +1,6 @@
 require 'securerandom'
 
-class ResetPasswordToken 
+class ResetPasswordToken
   include MongoMapper::Document
 
   belongs_to :user, :class_name => "User"

@@ -18,11 +18,11 @@ class AbuseReport
 
   def check user
     if user.nil?
-        return
-      end
-      no_of_abuses = yield user
-      if no_of_abuses == 3
-        user.blocked = true
-      end
+      return
+    end
+    no_of_abuses = yield user
+    if no_of_abuses == 3
+      user.blocked = true
+    end
   end
 end

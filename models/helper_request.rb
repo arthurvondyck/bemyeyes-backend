@@ -6,6 +6,6 @@ class HelperRequest
 
   timestamps!
 
-  key :cancelled, Boolean, :default => false 
+  key :cancelled, Boolean, :default => false
   key :cancel_notification_sent, Boolean, :default => false
 end

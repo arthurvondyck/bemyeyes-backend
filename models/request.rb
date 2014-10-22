@@ -9,10 +9,10 @@ class Request
   key :short_id, String
   key :session_id, String, :required => true
   key :token, String, :required => true
-  key :answered, Boolean, :default => false 
+  key :answered, Boolean, :default => false
   key :blind_rating, Integer
   key :helper_rating, Integer
-  key :stopped, Boolean, :default => false 
+  key :stopped, Boolean, :default => false
 
   timestamps!
 
@@ -23,7 +23,7 @@ class Request
   def short_id_salt=(salt)
     @short_id_salt = salt
   end
-  
+
   def to_json()
     return { "opentok" => {
                "session_id" => self.session_id,
@@ -36,7 +36,7 @@ class Request
                "helper" => self.helper_rating
              },
              "answered" => self.answered
-           }.to_json
+             }.to_json
   end
 
   def self.running_requests

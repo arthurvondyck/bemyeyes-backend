@@ -10,24 +10,24 @@ DEFAULT_GO_TO_SLEEP_HOUR = 22
 class User
   include MongoMapper::Document
   SCHEMA = {
-      "type" => "object",
-      "required" => [],
-      "additionalProperties" => false,
-      "properties" => {
-          "user_id" => {"type" => "integer"},
-          "password" => {"type" => "string"},
-          "email" => {"type" => "string"},
-          "first_name" => {"type" => "string"},
-          "last_name" => {"type" => "string"},
-          "role" => {"type" => "string"},
-          "languages" => {"type" => "array"},
-      }
+    "type" => "object",
+    "required" => [],
+    "additionalProperties" => false,
+    "properties" => {
+      "user_id" => {"type" => "integer"},
+      "password" => {"type" => "string"},
+      "email" => {"type" => "string"},
+      "first_name" => {"type" => "string"},
+      "last_name" => {"type" => "string"},
+      "role" => {"type" => "string"},
+      "languages" => {"type" => "array"},
+    }
   }
 
   many :tokens, :foreign_key => :user_id, :class_name => "Token", :dependent => :destroy
   many :devices, :foreign_key => :user_id, :class_name => "Device"
-  one :reset_password_token, :foreign_key => :reset_password_token_id, :class_name => "ResetPasswordToken"  
-  
+  one :reset_password_token, :foreign_key => :reset_password_token_id, :class_name => "ResetPasswordToken"
+
   key :password_hash, String
   key :password_salt, String
   key :email, String, :required => true, :unique => true
@@ -48,7 +48,7 @@ class User
   key :go_to_sleep_in_seconds_since_midnight, Integer, :default => 0
 
   timestamps!
-  
+
   before_save :encrypt_password
   before_create :set_unique_id
   before_save :convert_times_to_utc
@@ -60,109 +60,110 @@ class User
   def self.asleep_users
     now = Time.now.utc
     now_in_seconds_since_midnight = time_to_seconds_since_midnight now, 0
-  
-      where(
-        "$or" => [
-        {:go_to_sleep_in_seconds_since_midnight.lte => now_in_seconds_since_midnight}, 
+
+    where(
+      "$or" => [
+        {:go_to_sleep_in_seconds_since_midnight.lte => now_in_seconds_since_midnight},
         {:wake_up_in_seconds_since_midnight.gte => now_in_seconds_since_midnight}
-        ])
+    ])
   end
 
   def self.authenticate_using_email(email, password)
     user = User.first(:email => { :$regex => /#{Regexp.escape(email)}/i })
-    if !user.nil?
-      return authenticate_password(user, password)
-    end
-    
-    return nil
-  end
-  
-  def self.authenticate_using_user_id(email, user_id)
-    user = User.first(:user_id => user_id)
-    if !user.nil?
-      return user
-    end
-    
-    return nil
-  end
 
-  def password=(pwd)
-    @password = pwd
-  end
+                                  if !user.nil?
+                                    return authenticate_password(user, password)
+                                  end
 
-  def snooze
-    if self.available_from && Time.now.utc < self.available_from
-      { "period" => self.snooze_period,
-        "until" => self.available_from
-      }
-    else
-      nil
-    end
-  end
+                                  return nil
+                                  end
 
-  def to_json()
-    return { "id" => self._id,
-             "user_id" => self.user_id,
-             "email" => self.email,
-             "first_name" => self.first_name,
-             "last_name" => self.last_name,
-             "role" => self.role,
-             "languages" => self.languages,
-             "snooze" => self.snooze
-    }.to_json
-  end
+                                  def self.authenticate_using_user_id(email, user_id)
+                                    user = User.first(:user_id => user_id)
+                                    if !user.nil?
+                                      return user
+                                    end
 
-  def to_s
-    "#{self.first_name}"
-  end
+                                    return nil
+                                  end
 
-  private
+                                  def password=(pwd)
+                                    @password = pwd
+                                  end
 
-  def user_saved
-      EventBus.announce(:user_saved, user_id: _id)
-  end
+                                  def snooze
+                                    if self.available_from && Time.now.utc < self.available_from
+                                      { "period" => self.snooze_period,
+                                        "until" => self.available_from
+                                        }
+                                    else
+                                      nil
+                                    end
+                                  end
 
-  def convert_times_to_utc
-     wake_up_time = Time.parse(wake_up)
-     go_to_sleep_time = Time.parse(go_to_sleep)
-     self.wake_up_in_seconds_since_midnight = User.time_to_seconds_since_midnight wake_up_time, utc_offset
-     self.go_to_sleep_in_seconds_since_midnight = User.time_to_seconds_since_midnight go_to_sleep_time, utc_offset
-  end
+                                  def to_json()
+                                    return { "id" => self._id,
+                                             "user_id" => self.user_id,
+                                             "email" => self.email,
+                                             "first_name" => self.first_name,
+                                             "last_name" => self.last_name,
+                                             "role" => self.role,
+                                             "languages" => self.languages,
+                                             "snooze" => self.snooze
+                                             }.to_json
+                                  end
 
-  def self.time_to_seconds_since_midnight time, utc_offset
-    #the utc offset should actually be subtracted - look at a map if in doubt
-    hour_in_utc = time.hour - utc_offset
-    hour_in_utc * 3600 + time.min * 60
-  end
+                                  def to_s
+                                    "#{self.first_name}"
+                                  end
 
-  def self.authenticate_password(user, password)
-    if user && user.password_hash == BCrypt::Engine.hash_secret(password, user.password_salt)
-      return user
-    end
-    
-    return nil
-  end
+                                  private
 
-  def encrypt_password
-    if @password.present?
-      self.password_salt = BCrypt::Engine.generate_salt
-      self.password_hash = BCrypt::Engine.hash_secret(@password, password_salt)
-    end
-  end
+                                  def user_saved
+                                    EventBus.announce(:user_saved, user_id: _id)
+                                  end
 
-  def generate_unique_id
-    rand = ("817173" + rand(9999999).to_s.center(8, rand(9).to_s)).to_i
-    if User.where(:user_id => rand).count > 0
-      generate_unique_id
-    else
-      return rand
-    end
-  end
+                                  def convert_times_to_utc
+                                    wake_up_time = Time.parse(wake_up)
+                                    go_to_sleep_time = Time.parse(go_to_sleep)
+                                    self.wake_up_in_seconds_since_midnight = User.time_to_seconds_since_midnight wake_up_time, utc_offset
+                                    self.go_to_sleep_in_seconds_since_midnight = User.time_to_seconds_since_midnight go_to_sleep_time, utc_offset
+                                  end
 
-  def set_unique_id
-    unless self.user_id
-      unique_id =  generate_unique_id
-      self.user_id = unique_id
-    end
-  end
-end
+                                  def self.time_to_seconds_since_midnight time, utc_offset
+                                    #the utc offset should actually be subtracted - look at a map if in doubt
+                                    hour_in_utc = time.hour - utc_offset
+                                    hour_in_utc * 3600 + time.min * 60
+                                  end
+
+                                  def self.authenticate_password(user, password)
+                                    if user && user.password_hash == BCrypt::Engine.hash_secret(password, user.password_salt)
+                                      return user
+                                    end
+
+                                    return nil
+                                  end
+
+                                  def encrypt_password
+                                    if @password.present?
+                                      self.password_salt = BCrypt::Engine.generate_salt
+                                      self.password_hash = BCrypt::Engine.hash_secret(@password, password_salt)
+                                    end
+                                  end
+
+                                  def generate_unique_id
+                                    rand = ("817173" + rand(9999999).to_s.center(8, rand(9).to_s)).to_i
+                                    if User.where(:user_id => rand).count > 0
+                                      generate_unique_id
+                                    else
+                                      return rand
+                                    end
+                                  end
+
+                                  def set_unique_id
+                                    unless self.user_id
+                                      unique_id =  generate_unique_id
+                                      self.user_id = unique_id
+                                    end
+                                  end
+                                  end
