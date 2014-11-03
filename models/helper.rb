@@ -1,7 +1,6 @@
 class Helper < User
   many :helper_request, :foreign_key => :helper_id, :class_name => "HelperRequest"
   many :helper_points, :foreign_key => :user_id, :class_name => "HelperPoint"
-  many :abuse_report, :foreign_key => :abuse_report_id, :class_name => "AbuseReport"
   many :request, :foreign_key => :request_id, :class_name => "Request"
   key :user_level_id, ObjectId
   belongs_to :user_level, :class_name => 'UserLevel'
@@ -63,11 +62,11 @@ class Helper < User
       .all
       .collect(&:user_id)
 
-      abusive_helpers = AbuseReport
-      .where(:blind_id => request.blind_id)
-      .fields(:helper_id)
+      abusive_helpers = User
+      .where('abuse_reports.blind_id' => request.blind_id)
+      .fields(:_id)
       .all
-      .collect(&:helper_id)
+      .collect(&:_id)
 
       blocked_users = User
       .where(:blocked => true)
@@ -80,9 +79,6 @@ class Helper < User
       .fields(:user_id)
       .all
       .collect(&:user_id)
-
-      TheLogger.log.info "Asleep users:"
-      TheLogger.log.info asleep_users
 
       helpers_who_speaks_blind_persons_language = Helper.helpers_who_speaks_blind_persons_language(request)
       .fields(:user_id)
